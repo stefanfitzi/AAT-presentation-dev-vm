@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal convex has-vertical-slides has-horizontal-slides">
+			<div class="slides">
+				<section>
+					<h1>Dev-VMs</h1>
+					<p>from our "Wall of Pain":</p>
+					<blockquote>"VM for all Apps in Support
+					<br/>-
+					<br/>in order to make sure that we have a running ENV for support"</blockquote>
+				</section>
+				<section>
+					<h2>Problems to be solved</h2>
+					<ul>
+						<li>quick setup a working environment (bugfixing etc.)</li>
+						<li>up-to-date documentation of the dev environment</li>
+						<li>not messing up my own PC</li>
+						<li>independence of mimacom servers (slow VPN)</li>
+						<li>quick testing with restoring original situation</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>VM Image</h2>
+						<img src="images/vm.png"  width="624">
+					</section>
+					<section>
+						<h2>VM Image - Problems</h2>
+						<ul>
+							<li>very large &rarr; Sibad: 14GB (without database)</li>
+							<li>no documentation</li>
+							<li>lot of effort even for small changes</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Vagrant / Ansible</h2>
+						<img src="images/stack.png"  width="624">
+					</section>
+					<section>
+						<h2>Vagrant / Ansible - Problems</h2>
+						<ul>
+							<li>takes time to build</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>How can the effort be reduced?</h2>
+						<h3>Building blocks</h3>
+						<img src="images/legos.png"  width="400">
+					</section>
+					<section>
+						<h2>Building blocks</h2>
+						<h3>Set of good base VMs &rarr; Vagrant boxes</h3>
+						<ul>
+							<li>Base Linux Server (CentOS)</li>
+							<li>Linux Server (CentOS) with Oracle Db</li>
+							<li>etc.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Building blocks</h2>
+						<h3>Set of Ansible roles</h3>
+						<ul>
+							<li>GUI for CentOS</li>
+							<li>Java Dev Tools (JDK, IntelliJ, Maven, Git etc.)</li>
+							<li>Create Linux user</li>
+							<li>Restart Server</li>
+							<li>etc.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>How does it work?</h2>
+						<img src="images/ansible-example-setup.png	"  width="824">
+					</section>
+					<section>
+						<h2>How does it work?</h2>
+						<ul>
+							<li>blabl</li>
+						</ul>
+					</section>
+				</section>							
+				
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				slideNumber: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
