@@ -69,41 +69,39 @@
 				</section>
 				<section>
 					<section>
-						<h2>How can the effort be reduced?</h2>
-						<h3>Building blocks</h3>
-						<img src="images/legos.png"  width="400">
-					</section>
-					<section>
-						<h2>Building blocks</h2>
-						<h3>Set of good base VMs &rarr; Vagrant boxes</h3>
+						<h2>How does it work?</h2>
+						<h3>Prerequisites</h3>
 						<ul>
-							<li>Base Linux Server (CentOS)</li>
-							<li>Linux Server (CentOS) with Oracle Db</li>
-							<li>etc.</li>
+							<li>Vagrant must be installed on your machine</li>
+							<li>Ansible must be installed on your machine</li>
+						</ul>
+						<h3>... and then just</h3>
+						<ul>
+							<li>Checkout the scripts via Git</li>
+							<li>Run: <code>vagrant up</code></li>
 						</ul>
 					</section>
-					<section>
-						<h2>Building blocks</h2>
-						<h3>Set of Ansible roles</h3>
-						<ul>
-							<li>GUI for CentOS</li>
-							<li>Java Dev Tools (JDK, IntelliJ, Maven, Git etc.)</li>
-							<li>Create Linux user</li>
-							<li>Restart Server</li>
-							<li>etc.</li>
-						</ul>
-					</section>
-				</section>
-				<section>
 					<section>
 						<h2>How does it work?</h2>
 						<img src="images/ansible-example-setup.png	"  width="824">
 					</section>
 					<section>
-						<h2>How does it work?</h2>
-						<ul>
-							<li>. . .</li>
-						</ul>
+						<h2>Create environment</h2>
+						<h3>vagrant up</h3>
+						<img src="images/vagrant-up.png"  width="1324">
+					</section>
+					<section>
+						<h2>Changes on environment</h2>
+						<h3>vagrant provision</h3>
+						<img src="images/vagrant-provision.png"  width="1124">
+					</section>
+					<section>
+						<h2>Dev environment - Login</h2>
+						<img src="images/vm-login.png"  width="1124">
+					</section>
+					<section>
+						<h2>Dev environment - Tools</h2>
+						<img src="images/vm-intellij.png"  width="1124">
 					</section>
 				</section>
 				<section>
@@ -145,24 +143,8 @@
 							end
 						</code></pre>
 					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Vagrantfile - Ansible provisioner</h2>
-						<pre><code data-trim data-noescape>
-							Vagrant.configure(2) do |config|
-
-							  config.vm.box = "centos/7"
-
-							  config.vm.define "sibad.dev" do |srv|
-								srv.vm.hostname = "sibad.dev"
-								srv.vm.network "private_network", type: "dhcp"
-							  end
-
-							  <mark>config.vm.provision "ansible" do |ansible|</mark>
-								<mark>ansible.playbook = "dev.yml"</mark>
-							  <mark>end</mark>
-
-							end
-						</code></pre>
+					<section>
+						<img src="images/vagrant-boxes.png"  width="1324">
 					</section>
 					<section data-transition="fade-in fade-out">
 						<h2>Vagrantfile - Port forward / RAM</h2>
@@ -182,6 +164,25 @@
 
 						</code></pre>
 					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Vagrantfile - Ansible provisioner</h2>
+						<pre><code data-trim data-noescape>
+							Vagrant.configure(2) do |config|
+
+							  config.vm.box = "centos/7"
+
+							  config.vm.define "sibad.dev" do |srv|
+								srv.vm.hostname = "sibad.dev"
+								srv.vm.network "private_network", type: "dhcp"
+							  end
+
+							  <mark>config.vm.provision "ansible" do |ansible|</mark>
+								<mark>ansible.playbook = "dev.yml"</mark>
+							  <mark>end</mark>
+
+							end
+						</code></pre>
+					</section>
 				</section>
 
 				<section>
@@ -196,6 +197,19 @@
 							  - centos_gui
 							  - create_user
 						</code></pre>
+					</section>
+					<section data-transition="fade-out">
+						<h2>Ansible - Roles</h2>
+						<h3>Premade roles</h3>
+						<img src="images/ansible-galaxy.png"  width="824">
+					</section>
+					<section data-transition="fade-out">
+						<h2>Ansible - Roles</h2>
+						<h3>Selfmade roles</h3>
+						<pre><code data-trim data-noescape>
+							ansible-galaxy init restart_server
+						</code></pre>
+						<img src="images/role-structure.png"  width="824">
 					</section>
 					<section data-transition="fade-in fade-out">
 						<h2>Ansible role "centos_gui"</h2>
@@ -261,22 +275,29 @@
 
 				<section>
 					<section>
-						<h2>Create environment</h2>
-						<h3>vagrant up</h3>
-						<img src="images/vagrant-up.png"  width="1324">
+						<h2>How can the effort be reduced?</h2>
+						<h3>Building blocks</h3>
+						<img src="images/legos.png"  width="400">
 					</section>
 					<section>
-						<h2>Changes on environment</h2>
-						<h3>vagrant provision</h3>
-						<img src="images/vagrant-provision.png"  width="1124">
+						<h2>Building blocks</h2>
+						<h3>Set of good base VMs &rarr; Vagrant boxes</h3>
+						<ul>
+							<li>Base Linux Server (CentOS)</li>
+							<li>Linux Server (CentOS) with Oracle Db</li>
+							<li>etc.</li>
+						</ul>
 					</section>
 					<section>
-						<h2>Dev environment - Login</h2>
-						<img src="images/vm-login.png"  width="1124">
-					</section>
-					<section>
-						<h2>Dev environment - Tools</h2>
-						<img src="images/vm-intellij.png"  width="1124">
+						<h2>Building blocks</h2>
+						<h3>Set of Ansible roles</h3>
+						<ul>
+							<li>GUI for CentOS</li>
+							<li>Java Dev Tools (JDK, IntelliJ, Maven, Git etc.)</li>
+							<li>Create Linux user</li>
+							<li>Restart Server</li>
+							<li>etc.</li>
+						</ul>
 					</section>
 				</section>
 
