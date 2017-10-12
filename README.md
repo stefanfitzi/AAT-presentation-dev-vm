@@ -1,4 +1,4 @@
 # AAT-presentation-dev-vm
-Presentation of how development VMs can be setup
+Presentation of how we plan to setup our development VMs in future.
 
-see the presentation at: [stefanfitzi.github.io/AAT-presentation-dev-vm/](https://stefanfitzi.github.io/AAT-presentation-dev-vm/)
+watch the presentation at: [stefanfitzi.github.io/AAT-presentation-dev-vm/](https://stefanfitzi.github.io/AAT-presentation-dev-vm/)
