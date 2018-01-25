@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>AAT - Dev VMs</title>
+		<title>AAT - App Environment</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/league.css">
@@ -25,7 +25,7 @@
 		<div class="reveal no-img-borders convex has-vertical-slides has-horizontal-slides">
 			<div class="slides">
 				<section>
-					<h1>Dev-VMs</h1>
+					<h1>App Environment</h1>
 					<p>from our "Wall of Pain":</p>
 					<blockquote>"VM for all Apps in Support
 					<br/>-
@@ -42,285 +42,75 @@
 					</ul>
 				</section>
 				<section>
-					<section>
-						<h2>VM Image</h2>
-						<img src="images/vm.png"  width="624">
-					</section>
-					<section>
-						<h2>VM Image - Problems</h2>
-						<ul>
-							<li>very large &rarr; Sibad: 14GB (without database)</li>
-							<li>no documentation</li>
-							<li>lot of effort even for small changes</li>
-						</ul>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h2>Vagrant / Ansible</h2>
-						<img src="images/stack.png"  width="624">
-					</section>
-					<section>
-						<h2>Vagrant / Ansible - Problems</h2>
-						<ul>
-							<li>takes time to build</li>
-						</ul>
-					</section>
-				</section>
-				<section>
-					<section>
-						<h2>How does it work?</h2>
-						<h3>Prerequisites</h3>
-						<ul>
-							<li>Vagrant must be installed on your machine</li>
-							<li>Ansible must be installed on your machine</li>
-						</ul>
-						<h3>... and then just</h3>
-						<ul>
-							<li>Checkout the scripts via Git</li>
-							<li>Run: <code>vagrant up</code></li>
-						</ul>
-					</section>
-					<section>
-						<h2>How does it work?</h2>
-						<img src="images/ansible-example-setup.png	"  width="824">
-					</section>
-					<section>
-						<h2>Create environment</h2>
-						<h3>vagrant up</h3>
-						<img src="images/vagrant-up.png"  width="1324">
-					</section>
-					<section>
-						<h2>Changes on environment</h2>
-						<h3>vagrant provision</h3>
-						<img src="images/vagrant-provision.png"  width="1124">
-					</section>
-					<section>
-						<h2>Dev environment - Login</h2>
-						<img src="images/vm-login.png"  width="1124">
-					</section>
-					<section>
-						<h2>Dev environment - Tools</h2>
-						<img src="images/vm-intellij.png"  width="1124">
-					</section>
-				</section>
-				<section>
-					<section data-transition="fade-out">
-						<h2>Vagrantfile</h2>
-						<pre><code data-trim data-noescape>
-							Vagrant.configure(2) do |config|
-
-							  config.vm.box = "centos/7"
-
-							  config.vm.define "sibad.dev" do |srv|
-								srv.vm.hostname = "sibad.dev"
-								srv.vm.network "private_network", type: "dhcp"
-							  end
-
-							  config.vm.provision "ansible" do |ansible|
-								ansible.playbook = "dev.yml"
-							  end
-
-							end
-						</code></pre>
-					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Vagrantfile - box</h2>
-						<pre><code data-trim data-noescape>
-							Vagrant.configure(2) do |config|
-
-							 <mark>config.vm.box = "centos/7"</mark>
-
-							  config.vm.define "sibad.dev" do |srv|
-								srv.vm.hostname = "sibad.dev"
-								srv.vm.network "private_network", type: "dhcp"
-							  end
-
-							  config.vm.provision "ansible" do |ansible|
-								ansible.playbook = "dev.yml"
-							  end
-
-							end
-						</code></pre>
-					</section>
-					<section>
-						<img src="images/vagrant-boxes.png"  width="1324">
-					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Vagrantfile - Port forward / RAM</h2>
-						<pre><code data-trim data-noescape>
-							Vagrant.configure(2) do |config|
-
-							  config.vm.box = "centos/7"
-							  config.ssh.insert_key = false
-							  config.vm.synced_folder ".", "/vagrant", disabled: true
-							  <mark>config.vm.network "forwarded_port", guest: 8080, host: 8080</mark>
-
-							  config.vm.provider :virtualbox do |v|
-								<mark>v.memory = 2048</mark>
-							  end
-
-							  . . .
-
-						</code></pre>
-					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Vagrantfile - Ansible provisioner</h2>
-						<pre><code data-trim data-noescape>
-							Vagrant.configure(2) do |config|
-
-							  config.vm.box = "centos/7"
-
-							  config.vm.define "sibad.dev" do |srv|
-								srv.vm.hostname = "sibad.dev"
-								srv.vm.network "private_network", type: "dhcp"
-							  end
-
-							  <mark>config.vm.provision "ansible" do |ansible|</mark>
-								<mark>ansible.playbook = "dev.yml"</mark>
-							  <mark>end</mark>
-
-							end
-						</code></pre>
-					</section>
-				</section>
-
-				<section>
-					<section data-transition="fade-out">
-						<h2>Ansible - dev.yml</h2>
-						<pre><code data-trim data-noescape>
-							---
-
-							- hosts: dev_nodes
-							  become: true
-							  roles:
-							  - centos_gui
-							  - create_user
-						</code></pre>
-					</section>
-					<section data-transition="fade-out">
-						<h2>Ansible - Roles</h2>
-						<h3>Premade roles</h3>
-						<img src="images/ansible-galaxy.png"  width="824">
-					</section>
-					<section data-transition="fade-out">
-						<h2>Ansible - Roles</h2>
-						<h3>Selfmade roles</h3>
-						<pre><code data-trim data-noescape>
-							ansible-galaxy init restart_server
-						</code></pre>
-						<img src="images/role-structure.png"  width="824">
-					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Ansible role "centos_gui"</h2>
-						<h3>tasks/main.yml</h3>
-						<pre><code data-trim data-noescape>
-							---
-							# install the necessary packages for a GUI
-
-							- name: Install x windows system
-							  yum:
-								name: "@X Window System"
-								state: present
-
-							- name: Install GNOME Shell classic mode
-							  yum:
-								name: gnome-classic-session
-								state: present
-						</code></pre>
-					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Ansible role "centos_gui"</h2>
-						<h3>handlers/main.yml</h3>
-						<pre><code data-trim data-noescape>
-							---
-							# handlers for restarting the VM
-
-							- name: Restart server
-							  shell: sleep 2 && shutdown -r now "Reboot by Ansible"
-							  async: 1
-							  poll: 0
-							  ignore_errors: true
-
-							- name: Wait for server to restart
-							  wait_for:
-								host={{ inventory_hostname }}
-								port=22
-								state=started
-								. . .
-						</code></pre>
-					</section>
-					<section data-transition="fade-in fade-out">
-						<h2>Ansible role "create_user"</h2>
-						<h3>tasks/main.yml</h3>
-						<pre><code data-trim data-noescape>
-							---
-							# tasks file for create_user
-
-							- name: add user
-							  user:
-								name: "{{ create_user_name }}"
-								group: vagrant
-								home: "/home/{{ create_user_name }}"
-								state: present
-							  register: newuser
-
-							- name: set password for user (only on creation)
-							  shell: "echo {{ create_user_password }}
-									| passwd --stdin {{ create_user_name }}"
-							  when: newuser.changed
-						</code></pre>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>How can the effort be reduced?</h2>
-						<h3>Building blocks</h3>
-						<img src="images/legos.png"  width="400">
-					</section>
-					<section>
-						<h2>Building blocks</h2>
-						<h3>Set of good base VMs &rarr; Vagrant boxes</h3>
-						<ul>
-							<li>Base Linux Server (CentOS)</li>
-							<li>Linux Server (CentOS) with Oracle Db</li>
-							<li>etc.</li>
-						</ul>
-					</section>
-					<section>
-						<h2>Building blocks</h2>
-						<h3>Set of Ansible roles</h3>
-						<ul>
-							<li>GUI for CentOS</li>
-							<li>Java Dev Tools (JDK, IntelliJ, Maven, Git etc.)</li>
-							<li>Create Linux user</li>
-							<li>Restart Server</li>
-							<li>etc.</li>
-						</ul>
-					</section>
-				</section>
-
-				<section>
-					<h1>Additional benefits</h1>
+					<h2>What has changed since last presentation?</h2>
 					<ul>
-						<li>less download volume<br/><i>(and less disk space when not in use)</i>:<br/>14GB VM image vs. <mark>1.2GB</mark></li>
-						<li>less disk space when in use:<br/>15GB vs. <mark>7.5GB</mark></li>
-						<li>once downloaded Vagrant boxes are reused</li>
+						<li>80/20: 80% solution, but easier</li>
+						<li>using Docker and docker-compose instead of Vagrant, Ansible etc...</li>
+						<li>Ansible can be still helpful as "scripting solution"</li>
+						<li>not only for development environment, but also for testing etc.</li>
 					</ul>
 				</section>
-
-				<section id="weekly2">
-					<h2>Currently needed "blocks"</h2>
-					<ul>
-						<li>Oracle database</li>
-						<li>MySQL database</li>
-						<li>mail server</li>
-						<li>ftp server</li>
-						<li>SoapUI mocks</li>
-						<li>Tomcat in a specific version (some of them with additional libs)</li>
-						<li>Java in a specific version</li>
-					</ul>
+				<section>
+					<section>
+						<h2>Get familiar with Docker</h2>
+						<img src="images/pres2/docker-cookbook.png"  width="300">
+					</section>
+					<section>
+						<h2>Get familiar with Docker</h2>
+						<ul>
+							<li>Book download: <a href="http://freepdf-books.com/docker-cookbook/">http://freepdf-books.com/docker-cookbook/</a> </li>
+							<li>Going through chapter 1 will take you 1-2 hours</li>
+							<li>not much reading</li>
+							<li>small examples &rarr; play them through yourself</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>What we needed for project</h2>
+						<h3>services to run the application</h3>
+						<img src="images/pres2/tp-systemoverview.png"  width="771">
+					</section>
+					<section>
+						<h2>What we needed for project</h2>
+						<h3>during development</h3>
+						<img src="images/pres2/tp-dev-env.png"  width="771">
+					</section>
+					<section>
+						<h2>What we needed for project</h2>
+						<h3>for testing</h3>
+						<img src="images/pres2/tp-test-env.png"  width="778">
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Three steps</h2>
+						<ul>
+							<li>Define the services that make up your app in <code>docker-compose.yml</code> so they can be run together in an isolated environment.</li>
+							<li>Search for an appropriate base image (e.g. at https://hub.docker.com) and “refine” it with a <code>Dockerfile</code>.</li>
+							<li>Lastly, run <code>docker-compose up</code> and Compose will start and run your entire app.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Example- SAML IdP & SFTP server</h2>
+						<img src="images/pres2/docker-compose-file.png"  width="901">
+					</section>
+					<section>
+						<h2>Define the Dockerfiles</h2>
+						<h3>Dockerfile for sftp server</h3>
+						<img src="images/pres2/docker-sftp.png"  width="923">
+					</section>
+					<section>
+						<h2>Define the Dockerfiles</h2>
+						<h3>Dockerfile for Shibboleth server</h3>
+						<img src="images/pres2/docker-shibboleth.png"  width="898">
+					</section>
+					<section>
+						<h2>Links to documentation</h2>
+						docker-compose: https://docs.docker.com/compose/compose-file/ <br>
+						Dockerfile: https://docs.docker.com/engine/reference/builder/ <br>
+						about add / copy: https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/#add-or-copy
+					</section>
 				</section>
 			</div>
 		</div>

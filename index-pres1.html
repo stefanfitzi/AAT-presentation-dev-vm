@@ -1,0 +1,363 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>AAT - Dev VMs</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal no-img-borders convex has-vertical-slides has-horizontal-slides">
+			<div class="slides">
+				<section>
+					<h1>Dev-VMs</h1>
+					<p>from our "Wall of Pain":</p>
+					<blockquote>"VM for all Apps in Support
+					<br/>-
+					<br/>in order to make sure that we have a running ENV for support"</blockquote>
+				</section>
+				<section>
+					<h2>Problems to be solved</h2>
+					<ul>
+						<li>quick setup a working environment (bugfixing etc.)</li>
+						<li>up-to-date documentation of the dev environment</li>
+						<li>not messing up my own PC</li>
+						<li>independence of mimacom servers (slow VPN)</li>
+						<li>quick testing with restoring original situation</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>VM Image</h2>
+						<img src="images/vm.png"  width="624">
+					</section>
+					<section>
+						<h2>VM Image - Problems</h2>
+						<ul>
+							<li>very large &rarr; Sibad: 14GB (without database)</li>
+							<li>no documentation</li>
+							<li>lot of effort even for small changes</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Vagrant / Ansible</h2>
+						<img src="images/stack.png"  width="624">
+					</section>
+					<section>
+						<h2>Vagrant / Ansible - Problems</h2>
+						<ul>
+							<li>takes time to build</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>How does it work?</h2>
+						<h3>Prerequisites</h3>
+						<ul>
+							<li>Vagrant must be installed on your machine</li>
+							<li>Ansible must be installed on your machine</li>
+						</ul>
+						<h3>... and then just</h3>
+						<ul>
+							<li>Checkout the scripts via Git</li>
+							<li>Run: <code>vagrant up</code></li>
+						</ul>
+					</section>
+					<section>
+						<h2>How does it work?</h2>
+						<img src="images/ansible-example-setup.png	"  width="824">
+					</section>
+					<section>
+						<h2>Create environment</h2>
+						<h3>vagrant up</h3>
+						<img src="images/vagrant-up.png"  width="1324">
+					</section>
+					<section>
+						<h2>Changes on environment</h2>
+						<h3>vagrant provision</h3>
+						<img src="images/vagrant-provision.png"  width="1124">
+					</section>
+					<section>
+						<h2>Dev environment - Login</h2>
+						<img src="images/vm-login.png"  width="1124">
+					</section>
+					<section>
+						<h2>Dev environment - Tools</h2>
+						<img src="images/vm-intellij.png"  width="1124">
+					</section>
+				</section>
+				<section>
+					<section data-transition="fade-out">
+						<h2>Vagrantfile</h2>
+						<pre><code data-trim data-noescape>
+							Vagrant.configure(2) do |config|
+
+							  config.vm.box = "centos/7"
+
+							  config.vm.define "sibad.dev" do |srv|
+								srv.vm.hostname = "sibad.dev"
+								srv.vm.network "private_network", type: "dhcp"
+							  end
+
+							  config.vm.provision "ansible" do |ansible|
+								ansible.playbook = "dev.yml"
+							  end
+
+							end
+						</code></pre>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Vagrantfile - box</h2>
+						<pre><code data-trim data-noescape>
+							Vagrant.configure(2) do |config|
+
+							 <mark>config.vm.box = "centos/7"</mark>
+
+							  config.vm.define "sibad.dev" do |srv|
+								srv.vm.hostname = "sibad.dev"
+								srv.vm.network "private_network", type: "dhcp"
+							  end
+
+							  config.vm.provision "ansible" do |ansible|
+								ansible.playbook = "dev.yml"
+							  end
+
+							end
+						</code></pre>
+					</section>
+					<section>
+						<img src="images/vagrant-boxes.png"  width="1324">
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Vagrantfile - Port forward / RAM</h2>
+						<pre><code data-trim data-noescape>
+							Vagrant.configure(2) do |config|
+
+							  config.vm.box = "centos/7"
+							  config.ssh.insert_key = false
+							  config.vm.synced_folder ".", "/vagrant", disabled: true
+							  <mark>config.vm.network "forwarded_port", guest: 8080, host: 8080</mark>
+
+							  config.vm.provider :virtualbox do |v|
+								<mark>v.memory = 2048</mark>
+							  end
+
+							  . . .
+
+						</code></pre>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Vagrantfile - Ansible provisioner</h2>
+						<pre><code data-trim data-noescape>
+							Vagrant.configure(2) do |config|
+
+							  config.vm.box = "centos/7"
+
+							  config.vm.define "sibad.dev" do |srv|
+								srv.vm.hostname = "sibad.dev"
+								srv.vm.network "private_network", type: "dhcp"
+							  end
+
+							  <mark>config.vm.provision "ansible" do |ansible|</mark>
+								<mark>ansible.playbook = "dev.yml"</mark>
+							  <mark>end</mark>
+
+							end
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section data-transition="fade-out">
+						<h2>Ansible - dev.yml</h2>
+						<pre><code data-trim data-noescape>
+							---
+
+							- hosts: dev_nodes
+							  become: true
+							  roles:
+							  - centos_gui
+							  - create_user
+						</code></pre>
+					</section>
+					<section data-transition="fade-out">
+						<h2>Ansible - Roles</h2>
+						<h3>Premade roles</h3>
+						<img src="images/ansible-galaxy.png"  width="824">
+					</section>
+					<section data-transition="fade-out">
+						<h2>Ansible - Roles</h2>
+						<h3>Selfmade roles</h3>
+						<pre><code data-trim data-noescape>
+							ansible-galaxy init restart_server
+						</code></pre>
+						<img src="images/role-structure.png"  width="824">
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Ansible role "centos_gui"</h2>
+						<h3>tasks/main.yml</h3>
+						<pre><code data-trim data-noescape>
+							---
+							# install the necessary packages for a GUI
+
+							- name: Install x windows system
+							  yum:
+								name: "@X Window System"
+								state: present
+
+							- name: Install GNOME Shell classic mode
+							  yum:
+								name: gnome-classic-session
+								state: present
+						</code></pre>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Ansible role "centos_gui"</h2>
+						<h3>handlers/main.yml</h3>
+						<pre><code data-trim data-noescape>
+							---
+							# handlers for restarting the VM
+
+							- name: Restart server
+							  shell: sleep 2 && shutdown -r now "Reboot by Ansible"
+							  async: 1
+							  poll: 0
+							  ignore_errors: true
+
+							- name: Wait for server to restart
+							  wait_for:
+								host={{ inventory_hostname }}
+								port=22
+								state=started
+								. . .
+						</code></pre>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h2>Ansible role "create_user"</h2>
+						<h3>tasks/main.yml</h3>
+						<pre><code data-trim data-noescape>
+							---
+							# tasks file for create_user
+
+							- name: add user
+							  user:
+								name: "{{ create_user_name }}"
+								group: vagrant
+								home: "/home/{{ create_user_name }}"
+								state: present
+							  register: newuser
+
+							- name: set password for user (only on creation)
+							  shell: "echo {{ create_user_password }}
+									| passwd --stdin {{ create_user_name }}"
+							  when: newuser.changed
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>How can the effort be reduced?</h2>
+						<h3>Building blocks</h3>
+						<img src="images/legos.png"  width="400">
+					</section>
+					<section>
+						<h2>Building blocks</h2>
+						<h3>Set of good base VMs &rarr; Vagrant boxes</h3>
+						<ul>
+							<li>Base Linux Server (CentOS)</li>
+							<li>Linux Server (CentOS) with Oracle Db</li>
+							<li>etc.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Building blocks</h2>
+						<h3>Set of Ansible roles</h3>
+						<ul>
+							<li>GUI for CentOS</li>
+							<li>Java Dev Tools (JDK, IntelliJ, Maven, Git etc.)</li>
+							<li>Create Linux user</li>
+							<li>Restart Server</li>
+							<li>etc.</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h1>Additional benefits</h1>
+					<ul>
+						<li>less download volume<br/><i>(and less disk space when not in use)</i>:<br/>14GB VM image vs. <mark>1.2GB</mark></li>
+						<li>less disk space when in use:<br/>15GB vs. <mark>7.5GB</mark></li>
+						<li>once downloaded Vagrant boxes are reused</li>
+					</ul>
+				</section>
+
+				<section id="weekly2">
+					<h2>Currently needed "blocks"</h2>
+					<ul>
+						<li>Oracle database</li>
+						<li>MySQL database</li>
+						<li>mail server</li>
+						<li>ftp server</li>
+						<li>SoapUI mocks</li>
+						<li>Tomcat in a specific version (some of them with additional libs)</li>
+						<li>Java in a specific version</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			
+			Reveal.initialize({
+				slideNumber: true,
+				
+				multiplex: {
+					// comment out one of the following depending of whether you are master or client
+					secret: null, // null so the clients do not have control of the master presentation
+					//secret: '15064933367289407201', // Obtained from the socket.io server. Gives this (the master) control of the presentation
+					id: 'e64420e7cf322e48', // Obtained from socket.io server
+					url: 'https://reveal-js-multiplex-ccjbegmaii.now.sh' // Location of socket.io server
+				},
+				
+				dependencies: [
+					{ src: '//cdn.socket.io/socket.io-1.3.5.js', async: true },
+					// comment out one of the following depending of whether you are master or client
+					{ src: 'plugin/multiplex/client.js', async: true },
+					//{ src: 'plugin/multiplex/master.js', async: true },
+					// and if you want speaker notes
+					{ src: 'plugin/notes-server/client.js', async: true },
+					
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
