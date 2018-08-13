@@ -112,6 +112,86 @@
 						about add / copy: https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/#add-or-copy
 					</section>
 				</section>
+				<!-- new part 13.08.2018 -->
+				<section>
+					<section>
+						<h2>Experiences after half a year of use</h2>
+						<ul>
+							<li>It's easier to overcome the reluctance to look into an issue</li>
+							<li>I am quicker up and running with a project to analyse a bug</li>
+							<li>I don't fear messing up my setup or the database</li>
+							<li>The environment is well documented in form of a runnable setup</li>
+							<li>The "documentation" is up to date</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Suggestion</h2>
+						<img src="images/pres3/nerd.png"  width="359">
+						<p>New projects which are added to the support must either have a dockerized setup or we get budget to set it up.</p>
+					</section>
+					<section>
+						<h2>Variants used</h2>
+						<ul>
+							<li>Third systems running in Docker and application under development running from within IntelliJ.</li>
+							<li>With some apps I had the whole system running under Docker (including app server); <br/>
+								-> the exploded war artifact on a shared drive and remote debugging the Tomcat from IntelliJ.</li>
+						</ul>
+						<h2>Variant not used</h2>
+						<ul>
+							<li>The whole development system in Docker or a VM including IntelliJ, Java etc.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Reason for not using last variant</h2>
+						<p>
+							I think the effort to set up the 3 variant is too big compared to the gained value. Because having IntelliJ locally installed and having multiple Java versions available is not that much of a hassle. Plus it brings maximum speed (compared to having IntelliJ running within a VM) by using minimal ressources (I used a 8GB notebook and lately a 16GB notebook and it could usually handle the load).
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Experiences</h2>
+						<ul>
+							<li>There is a learning curve</li>
+							<li>What you learn will help you in projects -> containers are now used everywhere</li>
+							<li>Most difficult part: synchronized startup (waiting for other containers)</li>
+							<li>It's fun - after some initial frustrations</li>
+							<li>After done once or twice it becomes easier...</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Example Dikon</h2>
+						<p>Dikon was new to me, but it is now so easy to start it up:</p>
+						<video controls>
+							<source src="images/pres3/screencast-dikon-docker-setup.mp4" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					</section>
+					<section>
+						<h2>Tipps & Tricks</h2>
+						<img src="images/pres3/nerd.png"  width="359">
+						<p>New projects which are added to the support must either have a dockerized setup or we get budget to set it up.</p>
+					</section>
+					<section>
+						<h2>Variants used</h2>
+						<ul>
+							<li>Third systems running in Docker and application under development running from within IntelliJ.</li>
+							<li>With some apps I had the whole system running under Docker (including app server); <br/>
+								-> the exploded war artifact on a shared drive and remote debugging the Tomcat from IntelliJ.</li>
+						</ul>
+						<h2>Variant not used</h2>
+						<ul>
+							<li>The whole development system in Docker or a VM including IntelliJ, Java etc.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Reason for not using last variant</h2>
+						<p>
+							I think the effort to set up the 3 variant is too big compared to the gained value. Because having IntelliJ locally installed and having multiple Java versions available is not that much of a hassle. Plus it brings maximum speed (compared to having IntelliJ running within a VM) by using minimal ressources (I used a 8GB notebook and lately a 16GB notebook and it could usually handle the load).
+						</p>
+					</section>
+				</section>
 			</div>
 		</div>
 
@@ -128,8 +208,8 @@
 				
 				multiplex: {
 					// comment out one of the following depending of whether you are master or client
-					secret: null, // null so the clients do not have control of the master presentation
-					//secret: '15168707606691881731', // Obtained from the socket.io server. Gives this (the master) control of the presentation
+					//secret: null, // null so the clients do not have control of the master presentation
+					secret: '15168707606691881731', // Obtained from the socket.io server. Gives this (the master) control of the presentation
 					id: 'a99176b96d4a0a8a', // Obtained from socket.io server
 					url: 'https://reveal-js-multiplex-ccjbegmaii.now.sh' // Location of socket.io server
 				},
