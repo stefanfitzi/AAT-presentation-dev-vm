@@ -168,28 +168,32 @@
 							Your browser does not support the video tag.
 						</video>
 					</section>
+				</section>
+
+				<section>
 					<section>
 						<h2>Tipps & Tricks</h2>
-						<img src="images/pres3/nerd.png"  width="359">
-						<p>New projects which are added to the support must either have a dockerized setup or we get budget to set it up.</p>
+						During the setup of some supported applications I stumbled over a few difficulties. The solutions to those problems are documented in Rune:
+						<a href="https://rune.mimacom.com/pages/viewpage.action?pageId=128583776">https://rune.mimacom.com/pages/viewpage.action?pageId=128583776</a>
 					</section>
 					<section>
-						<h2>Variants used</h2>
-						<ul>
-							<li>Third systems running in Docker and application under development running from within IntelliJ.</li>
-							<li>With some apps I had the whole system running under Docker (including app server); <br/>
-								-> the exploded war artifact on a shared drive and remote debugging the Tomcat from IntelliJ.</li>
-						</ul>
-						<h2>Variant not used</h2>
-						<ul>
-							<li>The whole development system in Docker or a VM including IntelliJ, Java etc.</li>
-						</ul>
+						<h2>Used base images</h2>
+						When setting up your containers, it's best to search for an existing image which already does what you want. Use it as your base image and just add the needed customization.
+						The images I used and how I customized them are also documented in Rune:
+						<a href="https://rune.mimacom.com/pages/viewpage.action?spaceKey=AAT&title=Successfully+used+Docker+containers">https://rune.mimacom.com/pages/viewpage.action?spaceKey=AAT&title=Successfully+used+Docker+containers</a>
 					</section>
 					<section>
-						<h2>Reason for not using last variant</h2>
-						<p>
-							I think the effort to set up the 3 variant is too big compared to the gained value. Because having IntelliJ locally installed and having multiple Java versions available is not that much of a hassle. Plus it brings maximum speed (compared to having IntelliJ running within a VM) by using minimal ressources (I used a 8GB notebook and lately a 16GB notebook and it could usually handle the load).
-						</p>
+						<h2>Some more tipps to end up</h2>
+						<ul>
+							<li>Reuse containers for minimal effort to setup a new application environment (after I did Oracle, MS SQL, Tomcat, SoapUI, Mailserver containers, I hardly had to make a totally new container any more)</li>
+							<li>Use docker-compose to easily start the whole environment</li>
+							<li>Document the setup and the needed commands to use it nicely (you are probably not the only one using it) in a REAME.md file</li>
+							<li>Stop containers which are not used to free resources</li>
+							<li>clean up you images from time to time</li>
+							<li>always have a shared directory in order to easily exchange files between host and container (e.g. to try out database scripts)</li>
+							<li>if you don't know already, learn a bit of bash (to do stuff within the container) and use docker exec -it to work within the container</li>
+							<li>be careful with access rights (stuff created within the container is usually done as root and you might have a hard time to delete/change it from outside the container</li>
+						</ul>
 					</section>
 				</section>
 			</div>
